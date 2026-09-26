@@ -1080,6 +1080,11 @@ Le ping depuis le poste client du VLAN 10 (10.10.10.10) vers la passerelle (10.1
 ![Ping passerelle VLAN 20](Images/ping_vlan20.png)
 
 Le ping depuis le poste client du VLAN 20 (10.10.20.10) vers la passerelle (10.10.20.1) est réussi avec 0% de perte.
+### Test de connectivité - Ping passerelle VLAN 20
+
+![Ping passerelle VLAN 30](Images/ping_vlan30.png)
+Le ping depuis le poste client du VLAN 20 (10.10.30.10) vers la passerelle (10.10.30.1) est réussi avec 0% de perte.
+
 ### 7.2. Vérifications CLI
 
 **Switch S1**
