@@ -42,8 +42,8 @@ L'architecture globale de la maquette réseau déployée dans GNS3 est représen
 
 | Élément | Description |
 |---|---|
-| Routeur-Starlink | Connexion WAN vers Internet (192.168.122.0/24) |
-| pfSense | Pare-feu, NAT, QoS (WAN: 192.168.122.55/24, LAN: 10.0.0.1/30) |
+| Routeur-Starlink | Connexion WAN vers Internet (192.168.117.0/24) |
+| pfSense | Pare-feu, NAT, QoS (WAN: 192.168.117.164/24, LAN: 10.0.0.1/30) |
 | Routeur R1 | Routage inter-VLAN (Router-on-a-stick) |
 | Switch-manage | Commutation et segmentation VLAN (Trunk 802.1Q) |
 | Serveur Zabbix/Grafana | Supervision de l'infrastructure |
@@ -142,7 +142,7 @@ L'architecture adoptée suit une approche hiérarchique en couches :
 
 **Rôle Principal** : Connexion WAN vers Internet
 
-**Interfaces Clés** : DHCP sur 192.168.122.0/24
+**Interfaces Clés** : DHCP sur 192.168.117.0/24
 
 **Qu'est-ce que Starlink ?**
 
@@ -161,10 +161,10 @@ Dans le cadre de ce projet, Starlink a pour but de connecter une école rurale s
 **Fonctions assurées**
 
 - **Connectivité satellitaire** : Établissement et maintien de la liaison avec les satellites Starlink.
-- **Attribution d'adresses IP** : Distribution d'adresses IP dynamiques via DHCP sur le réseau local 192.168.122.0/24.
+- **Attribution d'adresses IP** : Distribution d'adresses IP dynamiques via DHCP sur le réseau local 192.168.117.0/24.
 - **Accès Internet** : Fourniture d'un accès haut débit avec des débits pouvant atteindre 305 Mbps en réception et 20 à 40 Mbps en émission.
 
-**Interconnexion** : Le routeur Starlink est connecté à l'interface WAN de pfSense (192.168.122.55/24).
+**Interconnexion** : Le routeur Starlink est connecté à l'interface WAN de pfSense (192.168.117.164/24).
 
 ---
 
@@ -174,7 +174,7 @@ Dans le cadre de ce projet, Starlink a pour but de connecter une école rurale s
 
 **Rôle Principal** : Pare-feu, NAT, QoS, Filtrage de contenu
 
-**Interfaces Clés** : WAN sur 192.168.122.55/24 et LAN sur 10.0.0.1/30
+**Interfaces Clés** : WAN sur 192.168.117.64/24 et LAN sur 10.0.0.1/30
 
 pfSense constitue le cœur de la sécurité et de la gestion du réseau. Il s'agit d'une distribution FreeBSD spécialisée dans les fonctions de pare-feu et de routage. Il occupe une position centrale entre le routeur Starlink et le routeur R1.
 
@@ -332,8 +332,8 @@ Les postes clients représentent les utilisateurs finaux : élèves, enseignants
 
 | Équipement | Interface | Adresse IP | VLAN |
 |---|---|---|---|
-| Routeur Starlink | WAN | 192.168.122.1/24 | - |
-| pfSense | WAN (em0) | 192.168.122.55/24 | - |
+| Routeur Starlink | WAN | 192.168.117.1/24 | - |
+| pfSense | WAN (em0) | 192.168.117.164/24 | - |
 | pfSense | LAN (em1) | 10.0.0.1/30 | - |
 | Routeur R1 | e0/1 | 10.0.0.2/30 | - |
 | Routeur R1 | e0/0.10 | 10.10.10.1/24 | 10 |
@@ -1061,7 +1061,7 @@ Differentiated Services Field: 0x88 (DSCP: AF41, ECN: Not-ECT)
 | Ping passerelle VLAN 20 | pc-win-2 | 10.10.20.1 | Succès |
 | Ping passerelle VLAN 30 | pc-win-3 | 10.10.30.1 | Succès |
 | Ping LAN pfSense | pc-win-2 | 10.0.0.1 | Succès |
-| Ping WAN pfSense | pc-win-2 | 192.168.122.55 | Succès |
+| Ping WAN pfSense | pc-win-2 | 192.168.117.64 | Succès |
 | Ping Internet | pc-win-2 | 8.8.8.8 | Succès |
 | Ping DNS | pc-win-2 | google.com | Succès |
 | Connexion WiFi | Client WiFi | Starlink-Education | Succès |
