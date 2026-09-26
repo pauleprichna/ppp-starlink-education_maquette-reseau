@@ -1,70 +1,46 @@
-# README.md - Partie Maquette Réseau (Version Complète et Finale)
+# Document de la Maquette Réseau – PPP Starlink Éducation
 
-```markdown
-# 🖧 Maquette Réseau - PPP Starlink Éducation
-
-Cette section du dépôt contient l'ensemble des fichiers relatifs à la maquette réseau du projet **PPP Starlink au Service de l'Éducation**.
-
-La maquette est réalisée sous **GNS3** et simule l'infrastructure réseau complète d'une école rurale sénégalaise connectée via Starlink.
-
----
-
-## 📋 Table des matières
-
-- [Objectifs de la maquette](#-objectifs-de-la-maquette)
-- [Architecture réseau](#-architecture-réseau)
-- [Définitions des termes techniques](#-définitions-des-termes-techniques)
-- [Description des équipements](#-description-des-équipements)
-- [Plan d'adressage](#-plan-dadressage)
-- [Mise en œuvre](#-mise-en-œuvre)
-- [Tests de validation](#-tests-de-validation)
-- [Supervision](#-supervision)
-
----
-
-## 🎯 Objectifs de la maquette
+## 1. Objectifs de la maquette
 
 Conformément au cahier des charges du projet, la maquette réseau poursuit les objectifs suivants :
 
-### Objectif général
+### 1.1. Objectif général
 
 Concevoir, dimensionner et documenter une maquette réseau fonctionnelle et reproductible pour une école rurale sénégalaise connectée via Starlink, dans le cadre du pilote défini par le projet.
 
-### Objectifs spécifiques
+### 1.2. Objectifs spécifiques
 
-| **N°** | **Objectif** | **Livrable associé** |
+| N° | Objectif | Livrable associé |
 |---|---|---|
 | 1 | Concevoir une architecture réseau hiérarchique intégrant routeur Starlink, pare-feu pfSense, routeur R1, switch S1, contrôleur WiFi vWLC et serveur de supervision | Maquette GNS3 + schéma commenté |
 | 2 | Mettre en œuvre la segmentation VLAN pour isoler les flux des élèves, enseignants, invités, administration et serveurs | Configuration du switch S1 |
-| 3 | Configurer le routage inter-VLAN selon la technique "Router-on-a-stick" pour assurer la communication entre les segments | Configuration du routeur R1 |
-| 4 | Déployer un pare-feu pfSense pour assurer la sécurité, le NAT, la QoS et le filtrage de contenu | Configuration pfSense |
-| 5 | Mettre en place un contrôleur WiFi pour gérer les SSIDs éducatifs et administratifs | Configuration vWLC |
-| 6 | Configurer le service DHCP pour l'attribution automatique des adresses IP par VLAN | Configuration R1 (pools DHCP) |
-| 7 | Déployer une solution de supervision (Zabbix + Grafana) pour le suivi en temps réel de l'infrastructure | Supervision SNMP |
-| 8 | Valider l'ensemble de la maquette par des tests de connectivité exhaustifs | Rapport de tests |
+| 3 | Configurer le routage inter-VLAN selon la technique "Router-on-a-stick" | Configuration du routeur R1 |
+| 4 | Déployer un pare-feu pfSense pour la sécurité, le NAT, la QoS et le filtrage | Configuration pfSense |
+| 5 | Mettre en place un contrôleur WiFi pour les SSIDs éducatifs et administratifs | Configuration vWLC |
+| 6 | Configurer le service DHCP pour l'attribution automatique des adresses IP | Configuration R1 |
+| 7 | Déployer une solution de supervision (Zabbix + Grafana) | Supervision SNMP |
+| 8 | Valider l'ensemble par des tests de connectivité exhaustifs | Rapport de tests |
 
-### Contraintes du cahier des charges
+### 1.3. Contraintes du cahier des charges
 
-| **Contrainte** | **Description** |
+| Contrainte | Description |
 |---|---|
 | Environnement | 100 % local et gratuit |
-| Outil de simulation | GNS3 pour la maquette réseau |
-| Données réelles | Tarifs Starlink Sénégal, cahier des charges ARTP, statistiques UNESCO/UIT |
-| Aucun terminal physique | Le pilote est conçu et chiffré ; un test réel reste possible si l'établissement est connecté |
+| Outil de simulation | GNS3 |
+| Données réelles | Tarifs Starlink Sénégal, ARTP, UNESCO/UIT |
+| Aucun terminal physique | Le pilote est conçu et chiffré |
 
 ---
 
-## 🏗️ Architecture réseau
+## 2. Architecture réseau
 
-### Schéma synoptique
+### 2.1. Schéma synoptique
 
-Le schéma ci-dessous illustre l'architecture globale de la maquette réseau déployée dans GNS3 :
-
-![Architecture réseau](Images/architecture.png)
+L'architecture globale de la maquette réseau déployée dans GNS3 est représentée par le schéma ci-dessous.
 
 **Légende du schéma :**
 
-| **Élément** | **Description** |
+| Élément | Description |
 |---|---|
 | Routeur-Starlink | Connexion WAN vers Internet (192.168.122.0/24) |
 | pfSense | Pare-feu, NAT, QoS (WAN: 192.168.122.55/24, LAN: 10.0.0.1/30) |
@@ -76,9 +52,9 @@ Le schéma ci-dessous illustre l'architecture globale de la maquette réseau dé
 | pc-win-2 | Poste client du VLAN 20 (Éducation) |
 | pc-win-3 | Poste client du VLAN 30 (Administration) |
 
-### Plan d'adressage et VLANs
+### 2.2. Plan d'adressage et VLANs
 
-| **VLAN** | **Nom** | **Sous-réseau** | **Passerelle** | **Usage** |
+| VLAN | Nom | Sous-réseau | Passerelle | Usage |
 |---|---|---|---|---|
 | 10 | Management | 10.10.10.0/24 | 10.10.10.1 | Administration réseau |
 | 20 | Éducation | 10.10.20.0/24 | 10.10.20.1 | Élèves et salles de classe |
@@ -86,201 +62,87 @@ Le schéma ci-dessous illustre l'architecture globale de la maquette réseau dé
 | 40 | Invités | 10.10.40.0/24 | 10.10.40.1 | Visiteurs et événements |
 | 50 | Serveurs | 10.10.50.0/24 | 10.10.50.1 | LMS, OER, supervision |
 
-### Principes de conception
+### 2.3. Principes de conception
 
-L'architecture adoptée suit une approche hiérarchique en couches, conforme aux bonnes pratiques de conception réseau. Cette organisation permet une séparation claire des fonctions, une meilleure maintenabilité et une évolutivité facilitée.
+L'architecture adoptée suit une approche hiérarchique en couches :
 
 - **Couche WAN** : Routeur Starlink pour la connexion Internet
 - **Couche sécurité** : pfSense pour le pare-feu, le NAT et la QoS
 - **Couche distribution** : Routeur R1 pour le routage inter-VLAN
-- **Couche accès** : Switch S1 et contrôleur vWLC pour la connexion des clients
-- **Couche supervision** : Serveur Zabbix/Grafana pour le suivi
+- **Couche accès** : Switch S1 et contrôleur vWLC
+- **Couche supervision** : Serveur Zabbix/Grafana
 
 ---
 
-## 📖 Définitions des termes techniques
+## 3. Définitions des termes techniques
 
-Cette section définit les principaux termes techniques utilisés dans la maquette réseau.
+**Starlink** : Service de connexion Internet par satellite développé par SpaceX. Il utilise une constellation de satellites en orbite basse (LEO) pour fournir un accès haut débit et faible latence dans les zones rurales et isolées.
 
----
+**VLAN (Virtual Local Area Network)** : Réseau local virtuel permettant de segmenter logiquement un réseau physique en plusieurs réseaux distincts.
 
-**Starlink**
+**Trunk (802.1Q)** : Liaison physique capable de transporter le trafic de plusieurs VLANs simultanément. Le protocole 802.1Q ajoute un tag VLAN à chaque trame.
 
-Starlink est un service de connexion Internet par satellite développé par SpaceX. Il utilise une constellation de satellites en orbite basse (LEO) pour fournir un accès haut débit et faible latence, notamment dans les zones rurales et isolées où les infrastructures terrestres (fibre optique, 4G) sont absentes ou insuffisantes.
+**Router-on-a-stick** : Technique permettant à un routeur d'assurer le routage entre plusieurs VLANs en utilisant une seule interface physique subdivisée en sous-interfaces.
 
----
+**Sous-interface** : Interface logique créée sur une interface physique, associée à un VLAN spécifique et possédant sa propre adresse IP.
 
-**VLAN (Virtual Local Area Network)**
+**VLAN natif** : VLAN dont le trafic n'est pas tagué sur un trunk. Le VLAN 10 (Management) est utilisé comme VLAN natif.
 
-Un VLAN est un réseau local virtuel permettant de segmenter logiquement un réseau physique en plusieurs réseaux distincts. Chaque VLAN isole le trafic des autres VLANs, ce qui améliore la sécurité et la gestion de la bande passante.
+**DHCP (Dynamic Host Configuration Protocol)** : Protocole permettant l'attribution automatique d'adresses IP aux équipements d'un réseau.
 
----
+**Pool DHCP** : Ensemble d'adresses IP qu'un serveur DHCP peut attribuer aux clients.
 
-**Trunk (802.1Q)**
+**Bail DHCP** : Durée pendant laquelle une adresse IP est attribuée à un client.
 
-Un trunk est une liaison physique capable de transporter le trafic de plusieurs VLANs simultanément. Le protocole 802.1Q ajoute un tag VLAN à chaque trame pour identifier son appartenance à un VLAN spécifique.
+**NAT (Network Address Translation)** : Technique permettant de traduire les adresses IP privées en adresses publiques.
 
----
+**Pare-feu (Firewall)** : Équipement ou logiciel filtrant le trafic réseau selon des règles définies.
 
-**Router-on-a-stick**
+**QoS (Quality of Service)** : Mécanisme permettant de prioriser certains types de trafic.
 
-Le Router-on-a-stick est une technique permettant à un routeur d'assurer le routage entre plusieurs VLANs en utilisant une seule interface physique, subdivisée en sous-interfaces logiques. Chaque sous-interface est associée à un VLAN et possède sa propre adresse IP.
+**SNMP (Simple Network Management Protocol)** : Protocole standard permettant la supervision des équipements réseau.
 
----
+**Communauté SNMP** : Mot de passe permettant l'accès aux informations SNMP d'un équipement.
 
-**Sous-interface**
+**SSID (Service Set Identifier)** : Nom du réseau WiFi diffusé par un point d'accès.
 
-Une sous-interface est une interface logique créée sur une interface physique. Chaque sous-interface est associée à un VLAN spécifique et possède sa propre adresse IP. Elle permet au routeur de traiter le trafic de plusieurs VLANs sur une seule interface physique.
+**WPA2-PSK** : Protocole de sécurité WiFi utilisant une clé pré-partagée pour l'authentification.
 
----
+**WLC (Wireless LAN Controller)** : Contrôleur gérant centralement les points d'accès WiFi.
 
-**VLAN natif**
+**vWLC** : Version virtualisée du contrôleur WiFi Cisco.
 
-Le VLAN natif est le VLAN dont le trafic n'est pas tagué sur un trunk. Par convention, le VLAN 10 (Management) est utilisé comme VLAN natif dans ce projet. Le trafic non tagué est automatiquement associé à ce VLAN.
+**Zabbix** : Solution open source de supervision réseau.
 
----
+**Grafana** : Plateforme de visualisation de données et de tableaux de bord.
 
-**DHCP (Dynamic Host Configuration Protocol)**
+**GNS3** : Simulateur réseau permettant de reproduire des topologies complexes.
 
-Le DHCP est un protocole permettant l'attribution automatique d'adresses IP aux équipements d'un réseau. Il évite la configuration manuelle des adresses IP sur chaque poste client.
+**pfSense** : Distribution FreeBSD spécialisée dans les fonctions de pare-feu et de routage.
 
----
+**LEO (Low Earth Orbit)** : Orbite basse terrestre, utilisée par les satellites Starlink.
 
-**Pool DHCP**
+**ARTP** : Autorité de Régulation des Télécommunications et des Postes du Sénégal.
 
-Un pool DHCP est un ensemble d'adresses IP qu'un serveur DHCP peut attribuer aux clients. Chaque VLAN dispose de son propre pool, ce qui permet une gestion différenciée des adresses par segment réseau.
+**New Deal Technologique** : Programme gouvernemental sénégalais visant à connecter un million de citoyens d'ici fin 2026.
 
----
+**GIGA** : Initiative conjointe de l'UNICEF et de l'UIT pour connecter toutes les écoles du monde à Internet.
 
-**Bail DHCP**
+**LMS (Learning Management System)** : Plateforme de gestion de l'apprentissage en ligne (Moodle, Canvas).
 
-Le bail DHCP est la durée pendant laquelle une adresse IP est attribuée à un client. À l'expiration du bail, le client doit renouveler son adresse auprès du serveur DHCP.
-
----
-
-**NAT (Network Address Translation)**
-
-Le NAT est une technique permettant de traduire les adresses IP privées en adresses publiques pour l'accès à Internet. Il permet à plusieurs équipements d'un réseau privé de partager une seule adresse IP publique.
+**OER (Open Educational Resources)** : Ressources éducatives libres et gratuites, accessibles en ligne.
 
 ---
 
-**Pare-feu (Firewall)**
+## 4. Description des équipements
 
-Un pare-feu est un équipement ou un logiciel filtrant le trafic réseau selon des règles définies. Il contrôle les flux entrants et sortants pour protéger le réseau contre les intrusions. pfSense est utilisé comme pare-feu dans ce projet.
+### 4.1. Routeur Starlink
 
----
+**Modèle / Type** : Kit Standard Starlink
 
-**QoS (Quality of Service)**
+**Rôle Principal** : Connexion WAN vers Internet
 
-La QoS est un mécanisme permettant de prioriser certains types de trafic (voix, vidéo) sur d'autres (navigation web, récréatif). Elle garantit une qualité optimale pour les usages critiques, notamment la visioconférence et les plateformes LMS.
-
----
-
-**SNMP (Simple Network Management Protocol)**
-
-Le SNMP est un protocole standard permettant la supervision des équipements réseau. Il permet à un serveur de supervision (Zabbix) de collecter des métriques sur l'état et les performances des équipements.
-
----
-
-**Communauté SNMP**
-
-La communauté SNMP est un mot de passe permettant l'accès aux informations SNMP d'un équipement. Dans ce projet, la communauté `public` est utilisée avec un accès en lecture seule (RO).
-
----
-
-**SSID (Service Set Identifier)**
-
-Le SSID est le nom du réseau WiFi diffusé par un point d'accès. Deux SSIDs sont configurés dans ce projet : `Starlink-Education` et `Starlink-Admin`.
-
----
-
-**WPA2-PSK**
-
-WPA2-PSK (Wi-Fi Protected Access 2 - Pre-Shared Key) est un protocole de sécurité WiFi utilisant une clé pré-partagée pour l'authentification.
-
----
-
-**WLC (Wireless LAN Controller)**
-
-Un WLC est un contrôleur gérant centralement les points d'accès WiFi et les SSIDs.
-
----
-
-**vWLC**
-
-Le vWLC est la version virtualisée du contrôleur WiFi Cisco.
-
----
-
-**Zabbix**
-
-Zabbix est une solution open source de supervision réseau.
-
----
-
-**Grafana**
-
-Grafana est une plateforme de visualisation de données et de tableaux de bord.
-
----
-
-**GNS3**
-
-GNS3 (Graphical Network Simulator 3) est un simulateur réseau permettant de reproduire des topologies complexes.
-
----
-
-**pfSense**
-
-pfSense est une distribution FreeBSD spécialisée dans les fonctions de pare-feu et de routage.
-
----
-
-**LEO (Low Earth Orbit)**
-
-LEO désigne l'orbite basse terrestre, utilisée par les satellites Starlink.
-
----
-
-**ARTP**
-
-L'ARTP (Autorité de Régulation des Télécommunications et des Postes) est l'organisme sénégalais chargé de réguler le secteur des télécommunications.
-
----
-
-**New Deal Technologique**
-
-Le New Deal Technologique est un programme gouvernemental sénégalais visant à connecter un million de citoyens d'ici fin 2026.
-
----
-
-**GIGA**
-
-GIGA est une initiative conjointe de l'UNICEF et de l'UIT pour connecter toutes les écoles du monde à Internet.
-
----
-
-**LMS (Learning Management System)**
-
-Un LMS est une plateforme de gestion de l'apprentissage en ligne (Moodle, Canvas).
-
----
-
-**OER (Open Educational Resources)**
-
-Les OER sont des ressources éducatives libres et gratuites, accessibles en ligne.
-
----
-
-## 🖥️ Description des équipements
-
-### Routeur Starlink
-
-**Modèle / Type :** Kit Standard Starlink
-
-**Rôle Principal :** Connexion WAN vers Internet
-
-**Interfaces Clés :** DHCP sur `192.168.122.0/24`
+**Interfaces Clés** : DHCP sur 192.168.122.0/24
 
 **Qu'est-ce que Starlink ?**
 
@@ -288,177 +150,177 @@ Starlink est un service de connexion Internet par satellite développé par Spac
 
 **But de Starlink dans cette maquette**
 
-Dans le cadre de ce projet, Starlink a pour but de **connecter une école rurale sénégalaise à Internet** là où les infrastructures terrestres (fibre optique, 4G) sont absentes ou insuffisantes. Il permet :
+Dans le cadre de ce projet, Starlink a pour but de connecter une école rurale sénégalaise à Internet là où les infrastructures terrestres (fibre optique, 4G) sont absentes ou insuffisantes. Il permet :
 
-- L'accès aux **plateformes pédagogiques en ligne** (Moodle, Canvas)
-- La **visioconférence** pour les cours à distance
-- L'accès aux **ressources éducatives libres** (OER)
-- La **formation des enseignants** à distance
-- La **supervision** de l'infrastructure réseau
+- L'accès aux plateformes pédagogiques en ligne (Moodle, Canvas)
+- La visioconférence pour les cours à distance
+- L'accès aux ressources éducatives libres (OER)
+- La formation des enseignants à distance
+- La supervision de l'infrastructure réseau
 
-**Fonctions assurées :**
+**Fonctions assurées**
 
 - **Connectivité satellitaire** : Établissement et maintien de la liaison avec les satellites Starlink.
-- **Attribution d'adresses IP** : Distribution d'adresses IP dynamiques via DHCP sur le réseau local `192.168.122.0/24`.
+- **Attribution d'adresses IP** : Distribution d'adresses IP dynamiques via DHCP sur le réseau local 192.168.122.0/24.
 - **Accès Internet** : Fourniture d'un accès haut débit avec des débits pouvant atteindre 305 Mbps en réception et 20 à 40 Mbps en émission.
 
-**Interconnexion :** Le routeur Starlink est connecté à l'interface WAN de pfSense (`192.168.122.55/24`).
+**Interconnexion** : Le routeur Starlink est connecté à l'interface WAN de pfSense (192.168.122.55/24).
 
 ---
 
-### pfSense
+### 4.2. pfSense
 
-**Modèle / Type :** pfSense 2.7.2-RELEASE
+**Modèle / Type** : pfSense 2.7.2-RELEASE
 
-**Rôle Principal :** Pare-feu, NAT, QoS, Filtrage de contenu
+**Rôle Principal** : Pare-feu, NAT, QoS, Filtrage de contenu
 
-**Interfaces Clés :** WAN sur `192.168.122.55/24` et LAN sur `10.0.0.1/30`
+**Interfaces Clés** : WAN sur 192.168.122.55/24 et LAN sur 10.0.0.1/30
 
 pfSense constitue le cœur de la sécurité et de la gestion du réseau. Il s'agit d'une distribution FreeBSD spécialisée dans les fonctions de pare-feu et de routage. Il occupe une position centrale entre le routeur Starlink et le routeur R1.
 
-**Fonctions assurées :**
+**Fonctions assurées**
 
 - **Pare-feu** : Analyse de chaque paquet réseau et décision d'autorisation ou de blocage selon des règles définies.
-- **NAT** : Traduction des adresses IP privées des VLANs (`10.10.0.0/16`) en l'adresse publique du routeur Starlink.
+- **NAT** : Traduction des adresses IP privées des VLANs (10.10.0.0/16) en l'adresse publique du routeur Starlink.
 - **QoS** : Priorisation du trafic pédagogique (visioconférence, LMS) sur le trafic récréatif.
 - **Filtrage de contenu** : Blocage des sites non éducatifs via Squid Proxy et pfBlockerNG.
 - **SNMP** : Exposition des métriques pour la supervision par Zabbix.
 
-**Interconnexion :** L'interface WAN (`em0`) est connectée au routeur Starlink. L'interface LAN (`em1`) est connectée au routeur R1.
+**Interconnexion** : L'interface WAN (em0) est connectée au routeur Starlink. L'interface LAN (em1) est connectée au routeur R1.
 
 ---
 
-### Routeur R1
+### 4.3. Routeur R1
 
-**Modèle / Type :** Cisco 4321
+**Modèle / Type** : Cisco 4321
 
-**Rôle Principal :** Routage inter-VLAN (Router-on-a-stick) et serveur DHCP
+**Rôle Principal** : Routage inter-VLAN (Router-on-a-stick) et serveur DHCP
 
-**Interfaces Clés :** Sous-interfaces pour les VLANs 10, 20, 30, 40, 50 et interface e0/1 sur `10.0.0.2/30`
+**Interfaces Clés** : Sous-interfaces pour les VLANs 10, 20, 30, 40, 50 et interface e0/1 sur 10.0.0.2/30
 
 Le routeur R1 assure le routage entre les différents VLANs et intègre le service DHCP pour l'attribution automatique des adresses IP.
 
-**Fonctions assurées :**
+**Fonctions assurées**
 
 - **Routage inter-VLAN** : Acheminement du trafic entre les différents segments logiques du réseau.
 - **Service DHCP** : Attribution automatique des adresses IP aux clients de chaque VLAN via des pools dédiés.
 - **Router-on-a-stick** : Utilisation d'une seule interface physique subdivisée en sous-interfaces pour transporter le trafic de tous les VLANs.
 - **Passerelle par défaut** : Chaque sous-interface sert de passerelle pour son VLAN respectif.
 
-**Interconnexion :** R1 est connecté au switch S1 via l'interface `e0/0` en mode trunk. R1 est connecté à pfSense via l'interface `e0/1` (`10.0.0.2/30`).
+**Interconnexion** : R1 est connecté au switch S1 via l'interface e0/0 en mode trunk. R1 est connecté à pfSense via l'interface e0/1 (10.0.0.2/30).
 
 ---
 
-### Switch S1
+### 4.4. Switch S1
 
-**Modèle / Type :** Cisco 2960
+**Modèle / Type** : Cisco 2960
 
-**Rôle Principal :** Commutation et segmentation VLAN
+**Rôle Principal** : Commutation et segmentation VLAN
 
-**Interfaces Clés :** Trunk vers R1 sur e0/0, trunk vers vWLC sur e0/2, ports d'accès pour les clients
+**Interfaces Clés** : Trunk vers R1 sur e0/0, trunk vers vWLC sur e0/2, ports d'accès pour les clients
 
 Le switch S1 constitue la couche d'accès et de distribution du réseau. Il assure la connectivité physique des clients et la segmentation logique via les VLANs.
 
-**Fonctions assurées :**
+**Fonctions assurées**
 
 - **Commutation Ethernet** : Acheminement des trames entre les ports au niveau de la couche 2.
 - **Segmentation VLAN** : Isolation logique du réseau en segments virtuels correspondant aux profils d'utilisateurs.
 - **Ports d'accès** : Configuration des ports connectés aux utilisateurs finaux (un VLAN par port).
 - **Ports trunk** : Configuration des ports connectés aux équipements d'infrastructure (transport de plusieurs VLANs).
 
-**Interconnexion :** Le switch S1 est connecté au routeur R1 (trunk `e0/0`), au contrôleur vWLC (trunk `e0/2`) et aux clients (ports d'accès).
+**Interconnexion** : Le switch S1 est connecté au routeur R1 (trunk e0/0), au contrôleur vWLC (trunk e0/2) et aux clients (ports d'accès).
 
 ---
 
-### Contrôleur WiFi (vWLC)
+### 4.5. Contrôleur WiFi (vWLC)
 
-**Modèle / Type :** Cisco 2504 (version virtualisée)
+**Modèle / Type** : Cisco 2504 (version virtualisée)
 
-**Rôle Principal :** Contrôleur WiFi
+**Rôle Principal** : Contrôleur WiFi
 
-**Interfaces Clés :** Interfaces dynamiques pour les VLANs 20 et 30, SSIDs éducatifs et administratifs
+**Interfaces Clés** : Interfaces dynamiques pour les VLANs 20 et 30, SSIDs éducatifs et administratifs
 
 Le vWLC gère les points d'accès sans fil et les connexions des utilisateurs mobiles.
 
-**Fonctions assurées :**
+**Fonctions assurées**
 
 - **Gestion des points d'accès** : Configuration, supervision et mise à jour des APs.
-- **Gestion des SSIDs** : Création et gestion des réseaux WiFi (`Starlink-Education` et `Starlink-Admin`).
+- **Gestion des SSIDs** : Création et gestion des réseaux WiFi (Starlink-Education et Starlink-Admin).
 - **Authentification et sécurité** : Authentification des utilisateurs via WPA2-PSK.
 - **Itinérance (Roaming)** : Transition transparente entre les points d'accès.
 
-**Interconnexion :** Le vWLC est connecté au switch S1 via le port `e0/2` en mode trunk.
+**Interconnexion** : Le vWLC est connecté au switch S1 via le port e0/2 en mode trunk.
 
 ---
 
-### Serveur Zabbix
+### 4.6. Serveur Zabbix
 
-**Modèle / Type :** Ubuntu 24.04 LTS
+**Modèle / Type** : Ubuntu 24.04 LTS
 
-**Rôle Principal :** Supervision et collecte de métriques réseau
+**Rôle Principal** : Supervision et collecte de métriques réseau
 
-**Interfaces Clés :** SNMP vers les équipements supervisés, interface web pour l'administration
+**Interfaces Clés** : SNMP vers les équipements supervisés, interface web pour l'administration
 
 Zabbix collecte en continu des métriques sur l'état et la performance des équipements réseau.
 
-**Fonctions assurées :**
+**Fonctions assurées**
 
 - **Collecte de métriques** : Interrogation régulière des équipements via SNMP.
 - **Stockage historique** : Conservation des données dans une base MySQL.
 - **Détection d'anomalies** : Comparaison des métriques avec des seuils et déclenchement d'alertes.
 - **Visualisation** : Interface web pour consulter l'état des équipements.
 
-**Interconnexion :** Le serveur Zabbix est connecté au switch S1 sur le VLAN 50 avec l'adresse `10.10.50.100/24`.
+**Interconnexion** : Le serveur Zabbix est connecté au switch S1 sur le VLAN 50 avec l'adresse 10.10.50.100/24.
 
 ---
 
-### Grafana
+### 4.7. Grafana
 
-**Modèle / Type :** Ubuntu 24.04 LTS
+**Modèle / Type** : Ubuntu 24.04 LTS
 
-**Rôle Principal :** Visualisation et tableaux de bord
+**Rôle Principal** : Visualisation et tableaux de bord
 
-**Interfaces Clés :** Connexion à la base de données Zabbix, interface web
+**Interfaces Clés** : Connexion à la base de données Zabbix, interface web
 
 Grafana permet de créer des tableaux de bord personnalisés à partir des données collectées par Zabbix.
 
-**Fonctions assurées :**
+**Fonctions assurées**
 
 - **Visualisation avancée** : Graphiques (jauges, courbes, barres) pour représenter les métriques.
-- **Tableaux de bord personnalisés** : Vues adaptées aux différents publics (administrateurs, direction).
+- **Tableaux de bord personnalisés** : Vues adaptées aux différents publics.
 - **Alertes visuelles** : Indicateurs d'alerte directement sur les tableaux de bord.
 - **Partage** : Diffusion des tableaux de bord avec des droits différenciés.
 
-**Interconnexion :** Grafana est installé sur le même serveur que Zabbix ou sur un serveur dédié.
+**Interconnexion** : Grafana est installé sur le même serveur que Zabbix ou sur un serveur dédié.
 
 ---
 
-### Postes Clients
+### 4.8. Postes Clients
 
-**Modèle / Type :** PC, ordinateurs portables et smartphones
+**Modèle / Type** : PC, ordinateurs portables et smartphones
 
-**Rôle Principal :** Simulation des usagers de l'école
+**Rôle Principal** : Simulation des usagers de l'école
 
-**Interfaces Clés :** Répartis sur les VLANs 10, 20, 30 et 40
+**Interfaces Clés** : Répartis sur les VLANs 10, 20, 30 et 40
 
 Les postes clients représentent les utilisateurs finaux : élèves, enseignants, personnel administratif et invités.
 
-**Types de clients :**
+**Types de clients**
 
 - **Clients du VLAN 20 (Éducation)** : Élèves et postes dans les salles de classe.
 - **Clients du VLAN 30 (Administration)** : Enseignants et personnel administratif.
 - **Clients du VLAN 10 (Management)** : Administrateurs réseau.
 - **Clients du VLAN 40 (Invités)** : Visiteurs et participants à des événements.
 
-**Interconnexion :** Les postes clients sont connectés aux ports d'accès du switch S1 ou aux SSIDs du vWLC.
+**Interconnexion** : Les postes clients sont connectés aux ports d'accès du switch S1 ou aux SSIDs du vWLC.
 
 ---
 
-## 📊 Plan d'adressage
+## 5. Plan d'adressage
 
-### VLANs et sous-réseaux
+### 5.1. VLANs et sous-réseaux
 
-| **VLAN** | **Nom** | **Sous-réseau** | **Passerelle** | **Plage DHCP** | **Usage** |
+| VLAN | Nom | Sous-réseau | Passerelle | Plage DHCP | Usage |
 |---|---|---|---|---|---|
 | 10 | Management | 10.10.10.0/24 | 10.10.10.1 | 10.10.10.100-200 | Administration réseau |
 | 20 | Éducation | 10.10.20.0/24 | 10.10.20.1 | 10.10.20.100-250 | Élèves et salles de classe |
@@ -466,9 +328,9 @@ Les postes clients représentent les utilisateurs finaux : élèves, enseignants
 | 40 | Invités | 10.10.40.0/24 | 10.10.40.1 | 10.10.40.100-150 | Visiteurs et événements |
 | 50 | Serveurs | 10.10.50.0/24 | 10.10.50.1 | Statique | LMS, OER, supervision |
 
-### Adressage des équipements d'infrastructure
+### 5.2. Adressage des équipements d'infrastructure
 
-| **Équipement** | **Interface** | **Adresse IP** | **VLAN** |
+| Équipement | Interface | Adresse IP | VLAN |
 |---|---|---|---|
 | Routeur Starlink | WAN | 192.168.122.1/24 | - |
 | pfSense | WAN (em0) | 192.168.122.55/24 | - |
@@ -485,75 +347,73 @@ Les postes clients représentent les utilisateurs finaux : élèves, enseignants
 | vWLC | vlan30_admin | 10.10.30.250/24 | 30 |
 | Serveur Zabbix | Serveurs | 10.10.50.100/24 | 50 |
 
-### SSIDs WiFi
+### 5.3. SSIDs WiFi
 
-| **SSID** | **VLAN** | **Interface** | **Sécurité** | **Usage** |
+| SSID | VLAN | Interface | Sécurité | Usage |
 |---|---|---|---|---|
-| `Starlink-Education` | 20 | vlan20_edu | WPA2-PSK | Élèves |
-| `Starlink-Admin` | 30 | vlan30_admin | WPA2-PSK | Enseignants |
+| Starlink-Education | 20 | vlan20_edu | WPA2-PSK | Élèves |
+| Starlink-Admin | 30 | vlan30_admin | WPA2-PSK | Enseignants |
 
 ---
 
-## 🚀 Mise en œuvre
+## 6. Mise en œuvre
 
-### Prérequis
+### 6.1. Prérequis
 
-**Logiciels requis :**
+**Logiciels requis**
 
-- **GNS3** 2.2 ou supérieur
-- **GNS3 VM** (recommandé pour les performances)
-- **Images Cisco** : IOS pour routeur 4321 et switch 2960
-- **pfSense** : image ISO ou VM (version 2.7.2 ou supérieure)
-- **vWLC** : image Cisco WLC (version 8.10 ou supérieure)
-- **Ubuntu Server** 24.04 LTS (pour le serveur Zabbix)
+- GNS3 2.2 ou supérieur
+- GNS3 VM (recommandé pour les performances)
+- Images Cisco : IOS pour routeur 4321 et switch 2960
+- pfSense : image ISO ou VM (version 2.7.2 ou supérieure)
+- vWLC : image Cisco WLC (version 8.10 ou supérieure)
+- Ubuntu Server 24.04 LTS (pour le serveur Zabbix)
 
-**Ressources système recommandées :**
+**Ressources système recommandées**
 
-| **Ressource** | **Minimum** | **Recommandé** |
+| Ressource | Minimum | Recommandé |
 |---|---|---|
 | RAM | 8 Go | 16 Go |
 | CPU | 4 cœurs | 8 cœurs |
 | Disque | 50 Go | 100 Go |
 
-### Installation
+### 6.2. Installation
 
-#### 1. Cloner le dépôt
+**1. Cloner le dépôt**
 
 ```bash
 git clone https://github.com/paulepricna/ppp-starlink-education.git
 cd ppp-starlink-education/maquette
 ```
 
-#### 2. Ouvrir le projet dans GNS3
+**2. Ouvrir le projet dans GNS3**
 
-1. Lancez **GNS3**
+1. Lancez GNS3
 2. Cliquez sur **File > Open project**
 3. Naviguez jusqu'au dossier `maquette/gns3_project/`
 4. Sélectionnez le fichier `project.gns3`
 5. Cliquez sur **Ouvrir**
 
-#### 3. Démarrer les équipements
+**3. Démarrer les équipements**
 
 1. Cliquez sur le bouton **Start all devices** (icône play verte)
-2. Attendez que tous les voyants passent au **vert**
+2. Attendez que tous les voyants passent au vert
 
-#### 4. Charger les configurations
+**4. Charger les configurations**
 
 Pour chaque équipement, chargez la configuration depuis le dossier `configs/`.
 
 ---
 
-## 🔧 Configuration du Switch S1
+### 6.3. Configuration du Switch S1
 
-### Étape 0 : Architecture et ports du switch S1
+#### Étape 0 : Architecture et ports du switch S1
 
 Avant de commencer la configuration, voici le schéma de la maquette réseau montrant les ports du switch S1 et leurs interconnexions.
 
-![Architecture réseau](Images/architecture.png)
-
 **Sur ce schéma, on peut identifier les ports du switch S1 :**
 
-| **Port** | **Mode** | **VLAN(s)** | **Destination** |
+| Port | Mode | VLAN(s) | Destination |
 |---|---|---|---|
 | e0/0 | Trunk | 10,20,30,40,50 | Routeur R1 |
 | e0/1 | Access | 50 | Serveur Zabbix (Ubuntu 24.04) |
@@ -562,22 +422,18 @@ Avant de commencer la configuration, voici le schéma de la maquette réseau mon
 | e1/0 | Access | 30 | pc-win-3 (Administration) |
 | e1/1 | Access | 20 | pc-win-2 (Éducation) |
 
-**Explication des connexions :**
+**Explication des connexions**
 
 - **Trunk e0/0** : Liaison vers le routeur R1, transporte tous les VLANs (10, 20, 30, 40, 50)
 - **Trunk e0/2** : Liaison vers le contrôleur vWLC, transporte les VLANs 10, 20 et 30
 - **Ports d'accès** : Chaque port est assigné à un VLAN spécifique (un port = un VLAN)
 - **VLAN natif** : Le VLAN 10 (Management) est utilisé comme VLAN natif sur les trunks
 
----
-
-### Étape 1 : Création des VLANs
+#### Étape 1 : Création des VLANs
 
 La première étape consiste à créer les différents VLANs qui segmenteront le réseau de l'école.
 
-![Création des VLANs](Images/creation_vlan.png)
-
-**Commandes exécutées :**
+**Commandes exécutées**
 
 ```cisco
 S1(config)#vlan 10
@@ -593,7 +449,7 @@ S1(config-vlan)#name Serveurs
 S1(config-vlan)#exit
 ```
 
-**Explication :**
+**Explication**
 
 - **VLAN 10 (Management)** : Dédié à l'administration réseau
 - **VLAN 20 (Education)** : Dédié aux élèves et aux salles de classe
@@ -601,17 +457,11 @@ S1(config-vlan)#exit
 - **VLAN 40 (Invites)** : Dédié aux visiteurs et événements
 - **VLAN 50 (Serveurs)** : Dédié aux serveurs (LMS, OER, supervision)
 
----
-
-### Étape 2 : Configuration des ports d'accès
+#### Étape 2 : Configuration des ports d'accès
 
 Une fois les VLANs créés, il faut assigner les ports d'accès aux différents VLANs.
 
-#### Configuration du port d'accès pour le VLAN 50 (Serveurs)
-
-![Configuration du mode accès VLAN 50](Images/mode_acces_vlan50.png)
-
-**Commandes exécutées :**
+**Configuration du port d'accès pour le VLAN 50 (Serveurs)**
 
 ```cisco
 S1(config)#interface ethernet 0/1
@@ -620,19 +470,13 @@ S1(config-if)#switchport access vlan 50
 S1(config-if)#exit
 ```
 
-**Analyse détaillée des commandes :**
+La commande `interface ethernet 0/1` sélectionne le port physique Ethernet 0/1 du switch S1. Ce port est destiné à être connecté au serveur Zabbix, qui doit appartenir au VLAN 50 (Serveurs).
 
-La commande `interface ethernet 0/1` sélectionne le port physique Ethernet 0/1 du switch S1. Ce port est identifié par son emplacement physique sur le switch. Il est destiné à être connecté au serveur Zabbix, qui doit appartenir au VLAN 50 (Serveurs).
+La commande `switchport mode access` configure le port en mode accès. Un port en mode accès ne transporte le trafic que d'un seul VLAN.
 
-La commande `switchport mode access` configure le port en mode accès. Un port en mode accès ne transporte le trafic que d'un seul VLAN, contrairement à un port trunk qui peut transporter plusieurs VLANs. Cette configuration est adaptée pour un port connecté à un terminal utilisateur ou à un serveur.
+La commande `switchport access vlan 50` assigne le port au VLAN 50 (Serveurs). Tout le trafic entrant et sortant sur ce port sera associé à ce VLAN.
 
-La commande `switchport access vlan 50` assigne le port au VLAN 50 (Serveurs). Tout le trafic entrant et sortant sur ce port sera associé à ce VLAN. Le switch ajoutera automatiquement le tag VLAN 50 aux trames sortant de ce port et enlèvera le tag pour les trames entrantes, simplifiant ainsi la configuration du serveur connecté.
-
-#### Configuration des ports d'accès pour les VLANs 10, 20 et 30
-
-![Configuration des ports d'accès VLANs 10, 20 et 30](Images/ports_acces_vlan.png)
-
-**Commandes exécutées :**
+**Configuration des ports d'accès pour les VLANs 10, 20 et 30**
 
 ```cisco
 S1(config)#interface ethernet 0/3
@@ -651,41 +495,27 @@ S1(config-if)#switchport access vlan 30
 S1(config-if)#exit
 ```
 
-**Analyse détaillée des commandes :**
-
 **Configuration du port Ethernet 0/3 (VLAN 10 - Management)**
 
 La commande `interface ethernet 0/3` sélectionne le port physique Ethernet 0/3 du switch S1. Ce port est destiné à être connecté au poste d'administration réseau `pc-win-1`.
 
-La commande `switchport mode access` configure le port en mode accès. Un port en mode accès ne transporte le trafic que d'un seul VLAN.
-
-La commande `switchport access vlan 10` assigne le port au VLAN 10 (Management). Tout le trafic transitant par ce port sera associé à ce VLAN.
+La commande `switchport access vlan 10` assigne le port au VLAN 10 (Management).
 
 **Configuration du port Ethernet 1/1 (VLAN 20 - Éducation)**
 
-La commande `interface ethernet 1/1` sélectionne le port physique Ethernet 1/1 du switch S1. Ce port est destiné à être connecté au poste élève `pc-win-2`.
+La commande `interface ethernet 1/1` sélectionne le port physique Ethernet 1/1. Ce port est destiné à être connecté au poste élève `pc-win-2`.
 
-La commande `switchport mode access` configure le port en mode accès.
-
-La commande `switchport access vlan 20` assigne le port au VLAN 20 (Éducation). Tout le trafic transitant par ce port sera associé à ce VLAN.
+La commande `switchport access vlan 20` assigne le port au VLAN 20 (Éducation).
 
 **Configuration du port Ethernet 1/0 (VLAN 30 - Administration)**
 
-La commande `interface ethernet 1/0` sélectionne le port physique Ethernet 1/0 du switch S1. Ce port est destiné à être connecté au poste enseignant `pc-win-3`.
+La commande `interface ethernet 1/0` sélectionne le port physique Ethernet 1/0. Ce port est destiné à être connecté au poste enseignant `pc-win-3`.
 
-La commande `switchport mode access` configure le port en mode accès.
+La commande `switchport access vlan 30` assigne le port au VLAN 30 (Administration).
 
-La commande `switchport access vlan 30` assigne le port au VLAN 30 (Administration). Tout le trafic transitant par ce port sera associé à ce VLAN.
+#### Étape 3 : Configuration des trunks
 
----
-
-### Étape 3 : Configuration des trunks
-
-#### Configuration du trunk vers le contrôleur WiFi (vWLC)
-
-![Configuration du trunk vers le vWLC](Images/trunk_vwlc.png)
-
-**Commandes exécutées :**
+**Configuration du trunk vers le contrôleur WiFi (vWLC)**
 
 ```cisco
 S1(config)#interface e0/2
@@ -698,27 +528,21 @@ S1(config-if)#switchport nonegotiate
 S1(config-if)#exit
 ```
 
-**Analyse détaillée des commandes :**
+La commande `interface e0/2` sélectionne le port physique Ethernet 0/2, dédié à la connexion avec le contrôleur WiFi vWLC.
 
-La commande `interface e0/2` sélectionne le port physique Ethernet 0/2 du switch S1. Ce port est dédié à la connexion avec le contrôleur WiFi vWLC.
+La commande `switchport trunk encapsulation dot1q` spécifie le protocole d'encapsulation (802.1Q).
 
-La commande `switchport trunk encapsulation dot1q` spécifie le protocole d'encapsulation à utiliser pour le trunk. Dot1q (802.1Q) est le standard IEEE pour le tagging VLAN, utilisé par la quasi-totalité des équipements réseau modernes.
+La commande `switchport mode trunk` configure le port en mode trunk pour transporter plusieurs VLANs.
 
-La commande `switchport mode trunk` configure le port en mode trunk. Un port en mode trunk transporte le trafic de multiples VLANs en ajoutant un tag VLAN à chaque trame. Cette configuration est indispensable pour un port connecté à un équipement qui doit communiquer avec plusieurs VLANs.
+La commande `desc Lien vers le vWLC` ajoute une description au port.
 
-La commande `desc Lien vers le vWLC` ajoute une description au port. Cette description est utile pour identifier le rôle du port lors des opérations de maintenance, sans avoir à consulter une documentation externe.
+La commande `switchport trunk native vlan 10` définit le VLAN 10 (Management) comme VLAN natif.
 
-La commande `switchport trunk native vlan 10` définit le VLAN 10 (Management) comme VLAN natif. Le VLAN natif est le VLAN pour lequel le trafic n'est pas tagué sur le trunk. Cette configuration est importante car elle permet de transporter le trafic de gestion sans tag, simplifiant la configuration du vWLC pour ce VLAN.
+La commande `switchport trunk allowed vlan 10,20,30,40,50` spécifie la liste des VLANs autorisés sur le trunk.
 
-La commande `switchport trunk allowed vlan 10,20,30,40,50` spécifie la liste des VLANs autorisés à circuler sur le trunk. Cette liste est exhaustive et correspond à l'ensemble des VLANs configurés sur le switch. Seuls ces VLANs pourront transiter sur le trunk.
+La commande `switchport nonegotiate` désactive la négociation automatique du mode trunk (DTP), renforçant la sécurité.
 
-La commande `switchport nonegotiate` désactive la négociation automatique du mode trunk. Sans cette commande, le switch essaierait de négocier le mode trunk via le protocole DTP (Dynamic Trunking Protocol), ce qui peut causer des problèmes de compatibilité ou de sécurité. La désactivation de DTP est une bonne pratique de sécurité.
-
-#### Configuration du trunk vers le routeur R1
-
-![Configuration du trunk vers R1](Images/trunk_r1.png)
-
-**Commandes exécutées :**
+**Configuration du trunk vers le routeur R1**
 
 ```cisco
 S1(config)#interface e0/0
@@ -730,37 +554,21 @@ S1(config-if)#desc Lien vers R1
 S1(config-if)#do wr
 ```
 
-**Analyse détaillée des commandes :**
+La commande `interface e0/0` sélectionne le port physique Ethernet 0/0, dédié à la liaison vers le routeur R1.
 
-La commande `interface e0/0` sélectionne le port physique Ethernet 0/0 du switch S1. Ce port est dédié à la liaison montante vers le routeur R1, qui assure le routage inter-VLAN.
+La commande `switchport trunk allowed vlan 10,20,30,40,50` spécifie la liste des VLANs autorisés sur le trunk.
 
-La commande `switchport trunk encapsulation dot1q` spécifie le protocole d'encapsulation à utiliser pour le trunk. Dot1q (802.1Q) est le standard IEEE pour le tagging VLAN, utilisé par la quasi-totalité des équipements réseau modernes.
+La commande `do wr` sauvegarde la configuration en mémoire NVRAM.
 
-La commande `switchport mode trunk` configure le port en mode trunk. Un port en mode trunk transporte le trafic de multiples VLANs en ajoutant un tag VLAN à chaque trame. Cette configuration est indispensable pour un port connecté à un routeur qui doit acheminer le trafic entre plusieurs VLANs.
+#### Étape 4 : Vérification des VLANs et des trunks
 
-La commande `switchport trunk native vlan 10` définit le VLAN 10 (Management) comme VLAN natif. Le VLAN natif est le VLAN pour lequel le trafic n'est pas tagué sur le trunk. Cette configuration est importante car elle permet de transporter le trafic de gestion sans tag, simplifiant la configuration du routeur R1 pour ce VLAN.
-
-La commande `switchport trunk allowed vlan 10,20,30,40,50` spécifie la liste des VLANs autorisés à circuler sur le trunk. Cette liste exhaustive inclut l'ensemble des VLANs configurés sur le switch, permettant au routeur R1 d'acheminer le trafic entre tous les segments du réseau.
-
-La commande `desc Lien vers R1` ajoute une description au port. Cette description est utile pour identifier le rôle du port lors des opérations de maintenance, sans avoir à consulter une documentation externe.
-
-La commande `do wr` sauvegarde la configuration en mémoire NVRAM. Cette sauvegarde est cruciale car elle garantit que la configuration est conservée même après un redémarrage du switch.
-
----
-
-### Étape 4 : Vérification des VLANs et des trunks
-
-#### Vérification des VLANs
-
-![Vérification des VLANs](Images/verification_vlan.png)
-
-**Commande exécutée :**
+**Vérification des VLANs**
 
 ```cisco
 S1(config)#do show vlan brief
 ```
 
-**Résultat obtenu :**
+**Résultat obtenu**
 
 ```
 VLAN Name                             Status    Ports
@@ -780,27 +588,17 @@ VLAN Name                             Status    Ports
 1005 trnet-default                    act/unsup
 ```
 
-**Commentaire du résultat :**
+**Commentaire du résultat**
 
-La commande `show vlan brief` affiche la liste complète des VLANs configurés sur le switch S1, avec leur identifiant, leur nom, leur statut et les ports qui leur sont assignés.
+La commande `show vlan brief` affiche la liste complète des VLANs configurés sur le switch S1. Les cinq VLANs (10, 20, 30, 40, 50) apparaissent avec le statut **active**, confirmant qu'ils sont correctement créés et opérationnels. Les VLANs 1002 à 1005 sont des VLANs par défaut spécifiques à Cisco et n'ont aucune incidence sur notre configuration.
 
-La première ligne concerne le **VLAN 1 (default)**. Ce VLAN est présent par défaut sur tous les switches Cisco et ne peut pas être supprimé. Tous les ports qui n'ont pas encore été assignés à un VLAN spécifique restent dans ce VLAN.
-
-Les **VLANs 10, 20, 30, 40 et 50** apparaissent avec leurs noms respectifs : Management, Education, Administration, Invites et Serveurs. Tous ont le statut **`active`**, ce qui confirme qu'ils ont été correctement créés et qu'ils sont opérationnels.
-
-Les **VLANs 1002 à 1005** sont des VLANs par défaut spécifiques aux environnements Cisco. Ils sont associés à des technologies réseau historiques (FDDI, Token Ring) qui ne sont plus utilisées dans les réseaux modernes. Leur statut **`act/unsup`** (active/unsupported) indique qu'ils sont actifs mais non supportés sur ce matériel. Ces VLANs sont sans incidence pour notre configuration.
-
-#### Vérification des trunks
-
-![Vérification des trunks](Images/verification_trunk.png)
-
-**Commande exécutée :**
+**Vérification des trunks**
 
 ```cisco
 S1(config)#do show interface trunk
 ```
 
-**Résultat obtenu :**
+**Résultat obtenu**
 
 ```
 Port    Mode    Encapsulation  Status    Native vlan
@@ -820,32 +618,24 @@ Et0/0   10,20,30,40,50
 Et0/2   10,20,30,40,50
 ```
 
-**Commentaire du résultat :**
+**Commentaire du résultat**
 
-La commande `show interface trunk` affiche l'état des ports configurés en mode trunk sur le switch S1.
+La commande `show interface trunk` confirme que les deux ports trunk (Et0/0 et Et0/2) sont opérationnels avec le statut **trunking**. L'encapsulation 802.1Q est correctement configurée. Le VLAN natif est défini sur 10 (Management) pour les deux trunks. La liste des VLANs autorisés correspond à l'ensemble des VLANs configurés.
 
-Le **port Et0/0** est configuré en mode trunk avec une encapsulation 802.1Q. Son statut est **`trunking`**, ce qui signifie qu'il est opérationnel et qu'il transporte effectivement le trafic de plusieurs VLANs. Le VLAN natif est défini sur **10 (Management)**. La liste des VLANs autorisés sur ce trunk est **10, 20, 30, 40 et 50**.
+**Conclusion de la vérification**
 
-Le **port Et0/2** est également configuré en mode trunk avec une encapsulation 802.1Q. Son statut est **`trunking`**. Le VLAN natif est **10 (Management)**. La liste des VLANs autorisés sur ce trunk est **10, 20, 30, 40 et 50**.
+- Les cinq VLANs sont **actifs** et correctement nommés
+- Les ports d'accès sont assignés aux bons VLANs
+- Les deux trunks sont **opérationnels** avec les VLANs autorisés
+- Le VLAN natif est bien configuré sur 10 (Management)
 
-**Conclusion de la vérification :**
-
-La vérification confirme que :
-
-- ✅ Les cinq VLANs sont **actifs** et correctement nommés
-- ✅ Les ports d'accès sont assignés aux bons VLANs (Management, Education, Administration, Serveurs)
-- ✅ Les deux trunks sont **opérationnels** avec les VLANs autorisés
-- ✅ Le VLAN natif est bien configuré sur 10 (Management)
-
-La configuration du switch S1 est donc **validée** et prête pour les tests de connectivité.
+La configuration du switch S1 est **validée** et prête pour les tests de connectivité.
 
 ---
 
-## 🔧 Configuration du Routeur R1
+### 6.4. Configuration du Routeur R1
 
-### Étape 1 : Configuration de base et des sous-interfaces VLAN
-
-**Commandes exécutées :**
+#### Étape 1 : Configuration de base et des sous-interfaces VLAN
 
 ```cisco
 R1(config)#hostname R1
@@ -880,21 +670,17 @@ R1(config-subif)#ip address 10.10.50.1 255.255.255.0
 R1(config-subif)#exit
 ```
 
-**Analyse détaillée des commandes :**
+**Analyse détaillée**
 
-La commande `hostname R1` modifie le nom d'hôte du routeur pour l'identifier clairement dans l'infrastructure réseau.
+La commande `hostname R1` modifie le nom d'hôte du routeur pour l'identifier clairement.
 
-La commande `interface e0/0` sélectionne l'interface physique Ethernet 0/0, qui est connectée au switch S1 via le trunk. La commande `no shutdown` active cette interface, tandis que `desc Lien vers le switch S1` ajoute une description.
+La commande `interface e0/0` sélectionne l'interface physique Ethernet 0/0, connectée au switch S1. La commande `no shutdown` active cette interface.
 
-Les sous-interfaces sont créées selon le principe du "Router-on-a-stick". La sous-interface `e0/0.10` est associée au VLAN 10 (Management) avec la commande `encapsulation dot1Q 10 native`. Le paramètre "native" indique que le VLAN 10 est le VLAN natif, c'est-à-dire que le trafic de ce VLAN n'est pas tagué sur le trunk. Les sous-interfaces `e0/0.20` à `e0/0.50` sont associées respectivement aux VLANs 20, 30, 40 et 50.
+Les sous-interfaces sont créées selon le principe du **Router-on-a-stick**. La sous-interface `e0/0.10` est associée au VLAN 10 (Management) avec la commande `encapsulation dot1Q 10 native`. Le paramètre "native" indique que le VLAN 10 est le VLAN natif. Les sous-interfaces `e0/0.20` à `e0/0.50` sont associées respectivement aux VLANs 20, 30, 40 et 50.
 
 Chaque sous-interface reçoit une adresse IP qui sert de passerelle par défaut pour son VLAN respectif.
 
----
-
-### Étape 2 : Configuration de l'interface vers pfSense
-
-**Commandes exécutées :**
+#### Étape 2 : Configuration de l'interface vers pfSense
 
 ```cisco
 R1(config)#interface e0/1
@@ -904,31 +690,17 @@ R1(config-if)#desc Lien vers pfSense
 R1(config-if)#exit
 ```
 
-**Analyse détaillée des commandes :**
+L'interface Ethernet 0/1 est dédiée à la liaison avec pfSense. L'adresse IP `10.0.0.2/30` est attribuée avec un masque `/30`, créant un réseau point-à-point avec exactement deux adresses utilisables : `10.0.0.1` pour pfSense et `10.0.0.2` pour R1.
 
-L'interface Ethernet 0/1 est dédiée à la liaison avec pfSense. L'adresse IP `10.0.0.2/30` est attribuée avec un masque `/30` (255.255.255.252), créant un réseau point-à-point avec exactement deux adresses utilisables : `10.0.0.1` pour pfSense et `10.0.0.2` pour R1.
-
-Le choix du masque `/30` est intentionnel : il minimise le gaspillage d'adresses IP et renforce la sécurité en réduisant la surface d'attaque.
-
----
-
-### Étape 3 : Configuration de la route par défaut
-
-**Commande exécutée :**
+#### Étape 3 : Configuration de la route par défaut
 
 ```cisco
 R1(config)#ip route 0.0.0.0 0.0.0.0 10.0.0.1
 ```
 
-**Analyse détaillée :**
+Cette commande configure la route par défaut sur le routeur R1. Tout le trafic dont la destination n'est pas connue localement sera envoyé à `10.0.0.1`, l'interface LAN de pfSense.
 
-Cette commande configure la route par défaut sur le routeur R1. Tout le trafic dont la destination n'est pas connue localement (c'est-à-dire tout ce qui ne fait pas partie des réseaux directement connectés) sera envoyé à `10.0.0.1`, qui est l'interface LAN de pfSense.
-
----
-
-### Étape 4 : Configuration du service DHCP
-
-**Commandes exécutées :**
+#### Étape 4 : Configuration du service DHCP
 
 ```cisco
 R1(config)#ip dhcp excluded-address 10.10.10.1 10.10.10.99
@@ -965,23 +737,15 @@ R1(dhcp-config)#lease 0 4
 R1(dhcp-config)#exit
 ```
 
-**Analyse détaillée des commandes :**
+Les commandes `ip dhcp excluded-address` réservent les premières adresses de chaque sous-réseau pour les équipements d'infrastructure. Quatre pools DHCP sont configurés, un pour chaque VLAN. Le pool INVITES a une durée de bail plus courte (4 heures).
 
-Les commandes `ip dhcp excluded-address` réservent les premières adresses de chaque sous-réseau pour les équipements d'infrastructure qui nécessitent des adresses statiques. Pour le VLAN 10, les adresses de `10.10.10.1` à `10.10.10.99` sont exclues, ce qui permet de réserver les adresses pour la passerelle, le switch, le vWLC et les autres équipements d'administration.
-
-Quatre pools DHCP sont configurés sur le routeur R1, un pour chaque VLAN nécessitant une attribution dynamique d'adresses. Le pool INVITES a une durée de bail plus courte (4 heures) pour limiter l'occupation des adresses IP par les invités.
-
----
-
-### Étape 5 : Vérification des interfaces
-
-**Commande exécutée :**
+#### Étape 5 : Vérification des interfaces
 
 ```cisco
 R1(config)#do show ip interface brief | exclude unassigned
 ```
 
-**Résultat obtenu :**
+**Résultat obtenu**
 
 ```
 Interface              IP-Address      OK? Method Status                Protocol
@@ -993,17 +757,13 @@ Ethernet0/0.50         10.10.50.1      YES manual up                    up
 Ethernet0/1            10.0.0.2        YES manual up                    up
 ```
 
-**Commentaire du résultat :**
-
-La commande `show ip interface brief` confirme que toutes les interfaces configurées sur le routeur R1 sont opérationnelles. Les cinq sous-interfaces correspondant aux VLANs 10, 20, 30, 40 et 50 apparaissent avec leurs adresses IP respectives et un statut `up/up`. L'interface e0/1, qui assure la liaison vers pfSense, est également opérationnelle.
+Toutes les interfaces configurées sur le routeur R1 sont opérationnelles (statut `up/up`).
 
 ---
 
-## 🔧 Configuration de pfSense
+### 6.5. Configuration de pfSense
 
-### Étape 1 : Configuration des interfaces
-
-**Procédure :**
+#### Étape 1 : Configuration des interfaces
 
 1. Connectez-vous à l'interface web de pfSense (`http://10.0.0.1`)
 2. Accédez à **Interfaces > Assignments**
@@ -1011,82 +771,54 @@ La commande `show ip interface brief` confirme que toutes les interfaces configu
    - **WAN (em0)** : DHCP (192.168.122.55/24)
    - **LAN (em1)** : 10.0.0.1/30
 
-**Configuration de l'interface WAN :**
-
-L'interface WAN de pfSense est connectée au routeur Starlink. Elle reçoit une adresse IP dynamique via DHCP sur le réseau `192.168.122.0/24`.
-
-**Configuration de l'interface LAN :**
-
-L'interface LAN de pfSense est connectée au routeur R1. Elle est configurée avec l'adresse statique `10.0.0.1/30`.
-
----
-
-### Étape 2 : Configuration de la passerelle vers R1
-
-**Procédure :**
+#### Étape 2 : Configuration de la passerelle vers R1
 
 1. Accédez à **System > Routing > Gateways**
 2. Cliquez sur **Add**
 3. Renseignez les paramètres :
 
-| **Paramètre** | **Valeur** |
+| Paramètre | Valeur |
 |---|---|
 | Interface | LAN |
-| Gateway Name | `GW_R1` |
-| IPv4 Gateway | `10.0.0.2` |
+| Gateway Name | GW_R1 |
+| IPv4 Gateway | 10.0.0.2 |
 
 4. Cliquez sur **Save** puis **Apply Changes**
 
----
-
-### Étape 3 : Configuration de la route statique
-
-**Procédure :**
+#### Étape 3 : Configuration de la route statique
 
 1. Accédez à **System > Routing > Static Routes**
 2. Cliquez sur **Add**
 3. Renseignez les paramètres :
 
-| **Paramètre** | **Valeur** |
+| Paramètre | Valeur |
 |---|---|
-| Destination Network | `10.10.0.0` |
-| Subnet | `16` |
-| Gateway | `GW_R1 - 10.0.0.2` |
+| Destination Network | 10.10.0.0 |
+| Subnet | 16 |
+| Gateway | GW_R1 - 10.0.0.2 |
 
 4. Cliquez sur **Save** puis **Apply Changes**
 
----
-
-### Étape 4 : Configuration du NAT Outbound
-
-**Procédure :**
+#### Étape 4 : Configuration du NAT Outbound
 
 1. Accédez à **Firewall > NAT > Outbound**
 2. Sélectionnez **Hybrid Outbound NAT rule generation**
-3. Cliquez sur **Save**
-4. Ajoutez une règle :
+3. Ajoutez une règle :
 
-| **Paramètre** | **Valeur** |
+| Paramètre | Valeur |
 |---|---|
 | Interface | WAN |
 | Protocol | Any |
-| Source | Network `10.10.0.0/16` |
+| Source | Network 10.10.0.0/16 |
 | Destination | Any |
 | Translation | Interface Address |
 
-5. Cliquez sur **Save** puis **Apply Changes**
-
----
-
-### Étape 5 : Configuration des règles de pare-feu
-
-**Procédure :**
+#### Étape 5 : Configuration des règles de pare-feu
 
 1. Accédez à **Firewall > Rules > LAN**
-2. Cliquez sur **Add**
-3. Renseignez les paramètres :
+2. Ajoutez une règle :
 
-| **Paramètre** | **Valeur** |
+| Paramètre | Valeur |
 |---|---|
 | Action | Pass |
 | Interface | LAN |
@@ -1095,105 +827,87 @@ L'interface LAN de pfSense est connectée au routeur R1. Elle est configurée av
 | Source | Any |
 | Destination | Any |
 
-4. Cliquez sur **Save** puis **Apply Changes**
-
----
-
-### Étape 6 : Configuration de SNMP
-
-**Procédure :**
+#### Étape 6 : Configuration de SNMP
 
 1. Accédez à **Services > SNMP**
 2. Cochez **Enable SNMP daemon**
-3. Renseignez les paramètres :
+3. Renseignez :
 
-| **Paramètre** | **Valeur** |
+| Paramètre | Valeur |
 |---|---|
-| Community | `public` |
+| Community | public |
 | SNMP v3 | Désactivé |
-| Bind Address | `10.0.0.1` |
-
-4. Cliquez sur **Save**
+| Bind Address | 10.0.0.1 |
 
 ---
 
-## 🔧 Configuration du vWLC
+### 6.6. Configuration du vWLC
 
-### Étape 1 : Configuration des interfaces dynamiques
-
-**Procédure :**
+#### Étape 1 : Configuration des interfaces dynamiques
 
 1. Connectez-vous à l'interface web du vWLC (`https://10.10.10.250`)
 2. Accédez à **CONTROLLER > Interfaces**
 3. Cliquez sur **New...**
 4. Créez les interfaces suivantes :
 
-**Interface vlan20_edu :**
+**Interface vlan20_edu**
 
-| **Paramètre** | **Valeur** |
+| Paramètre | Valeur |
 |---|---|
-| Interface Name | `vlan20_edu` |
-| VLAN ID | `20` |
-| Port Number | `1` |
-| IP Address | `10.10.20.250` |
-| Netmask | `255.255.255.0` |
-| Default Gateway | `10.10.20.1` |
-| Primary DHCP Server | `10.10.20.1` |
+| Interface Name | vlan20_edu |
+| VLAN ID | 20 |
+| Port Number | 1 |
+| IP Address | 10.10.20.250 |
+| Netmask | 255.255.255.0 |
+| Default Gateway | 10.10.20.1 |
+| Primary DHCP Server | 10.10.20.1 |
 
-**Interface vlan30_admin :**
+**Interface vlan30_admin**
 
-| **Paramètre** | **Valeur** |
+| Paramètre | Valeur |
 |---|---|
-| Interface Name | `vlan30_admin` |
-| VLAN ID | `30` |
-| Port Number | `1` |
-| IP Address | `10.10.30.250` |
-| Netmask | `255.255.255.0` |
-| Default Gateway | `10.10.30.1` |
-| Primary DHCP Server | `10.10.30.1` |
+| Interface Name | vlan30_admin |
+| VLAN ID | 30 |
+| Port Number | 1 |
+| IP Address | 10.10.30.250 |
+| Netmask | 255.255.255.0 |
+| Default Gateway | 10.10.30.1 |
+| Primary DHCP Server | 10.10.30.1 |
 
----
-
-### Étape 2 : Configuration des SSIDs (WLANs)
-
-**Procédure :**
+#### Étape 2 : Configuration des SSIDs (WLANs)
 
 1. Accédez à **WLANs > Create New > Go**
 2. Créez les SSIDs suivants :
 
-**SSID Starlink-Education :**
+**SSID Starlink-Education**
 
-| **Paramètre** | **Valeur** |
+| Paramètre | Valeur |
 |---|---|
-| Profile Name | `WLAN_Edu` |
-| SSID | `Starlink-Education` |
-| ID | `1` |
-| Interface | `vlan20_edu` |
+| Profile Name | WLAN_Edu |
+| SSID | Starlink-Education |
+| ID | 1 |
+| Interface | vlan20_edu |
 | Security | WPA2-PSK |
-| PSK | `Starlink2026!` |
+| PSK | Starlink2026! |
 
-**SSID Starlink-Admin :**
+**SSID Starlink-Admin**
 
-| **Paramètre** | **Valeur** |
+| Paramètre | Valeur |
 |---|---|
-| Profile Name | `WLAN_Admin` |
-| SSID | `Starlink-Admin` |
-| ID | `2` |
-| Interface | `vlan30_admin` |
+| Profile Name | WLAN_Admin |
+| SSID | Starlink-Admin |
+| ID | 2 |
+| Interface | vlan30_admin |
 | Security | WPA2-PSK |
-| PSK | `AdminPass2026!` |
+| PSK | AdminPass2026! |
 
----
-
-### Étape 3 : Vérification des interfaces et des WLANs
-
-**Commande exécutée :**
+#### Étape 3 : Vérification des interfaces et des WLANs
 
 ```cisco
 show interface summary
 ```
 
-**Résultat obtenu :**
+**Résultat obtenu**
 
 ```
 Interface Name                   Port Vlan Id  IP Address      Type    Ap Mgr Guest
@@ -1205,15 +919,9 @@ service-port                     N/A  N/A      0.0.0.0         DHCP    No     N/
 virtual                          N/A  N/A      1.1.1.1         Static  No     N/A
 ```
 
-**Commentaire du résultat :**
+Les interfaces du vWLC sont correctement configurées.
 
-La commande `show interface summary` confirme que les interfaces du vWLC sont correctement configurées. L'interface de management est configurée avec l'adresse `10.10.10.250` dans le VLAN 10. Les interfaces dynamiques `vlan20_edu` et `vlan30_admin` sont configurées avec les adresses `10.10.20.250` et `10.10.30.250` dans les VLANs 20 et 30 respectivement.
-
----
-
-### Étape 4 : Test de connectivité du vWLC
-
-**Commandes exécutées :**
+#### Étape 4 : Test de connectivité du vWLC
 
 ```cisco
 ping 10.10.10.1
@@ -1222,37 +930,20 @@ ping 10.10.30.1
 ping 10.0.0.1
 ```
 
-**Résultat attendu :**
-
-```
-Send count=3, Receive count=3 from 10.10.10.1
-Send count=3, Receive count=3 from 10.10.20.1
-Send count=3, Receive count=3 from 10.10.30.1
-Send count=3, Receive count=3 from 10.0.0.1
-```
-
-**Commentaire du résultat :**
-
-Les pings depuis le vWLC vers les passerelles de ses VLANs et vers pfSense sont tous réussis. Cela confirme que la configuration IP et le routage du vWLC sont corrects.
+Les pings depuis le vWLC vers les passerelles de ses VLANs et vers pfSense sont tous réussis.
 
 ---
 
-## 🔧 Configuration de la QoS
+### 6.7. Configuration de la QoS
 
-### Étape 1 : Création des ACL
-
-**Commandes exécutées :**
+#### Étape 1 : Création des ACL
 
 ```cisco
 R1(config)#access-list 101 permit ip 10.10.20.0 0.0.0.255 any
 R1(config)#access-list 102 permit ip 10.10.40.0 0.0.0.255 any
 ```
 
----
-
-### Étape 2 : Création des class-maps
-
-**Commandes exécutées :**
+#### Étape 2 : Création des class-maps
 
 ```cisco
 R1(config)#class-map match-any VOICE
@@ -1274,11 +965,7 @@ R1(config-cmap)#match access-group 102
 R1(config-cmap)#exit
 ```
 
----
-
-### Étape 3 : Création du policy-map
-
-**Commandes exécutées :**
+#### Étape 3 : Création du policy-map
 
 ```cisco
 R1(config)#policy-map QOS_POLICY
@@ -1304,11 +991,7 @@ R1(config-pmap-c)#exit
 R1(config-pmap)#exit
 ```
 
----
-
-### Étape 4 : Application du policy-map sur l'interface
-
-**Commande exécutée :**
+#### Étape 4 : Application du policy-map sur l'interface
 
 ```cisco
 R1(config)#interface e0/0
@@ -1316,17 +999,13 @@ R1(config-if)#service-policy output QOS_POLICY
 R1(config-if)#exit
 ```
 
----
-
-### Étape 5 : Vérification de la configuration QoS
-
-**Commande exécutée :**
+#### Étape 5 : Vérification de la configuration QoS
 
 ```cisco
 R1#show policy-map
 ```
 
-**Résultat obtenu :**
+**Résultat obtenu**
 
 ```
 Policy Map QOS_POLICY
@@ -1342,30 +1021,28 @@ Policy Map QOS_POLICY
       fair-queue
 ```
 
----
+#### Étape 6 : Test de la QoS
 
-### Étape 6 : Test de la QoS
-
-**Test VOICE (DSCP EF) :**
+**Test VOICE (DSCP EF)**
 
 ```cisco
 R1#ping 10.10.20.10 source 10.10.20.1 tos 184 repeat 100
 ```
 
-**Capture Wireshark :**
+**Capture Wireshark**
 
 ```
 Differentiated Services Field: 0xb8 (DSCP: EF, ECN: Not-ECT)
     1011 10.. = Differentiated Services Codepoint: Expedited Forwarding (46)
 ```
 
-**Test VIDEO (DSCP AF41) :**
+**Test VIDEO (DSCP AF41)**
 
 ```cisco
 R1#ping 10.10.20.10 source 10.10.20.1 tos 136 repeat 100
 ```
 
-**Capture Wireshark :**
+**Capture Wireshark**
 
 ```
 Differentiated Services Field: 0x88 (DSCP: AF41, ECN: Not-ECT)
@@ -1374,32 +1051,32 @@ Differentiated Services Field: 0x88 (DSCP: AF41, ECN: Not-ECT)
 
 ---
 
-## ✅ Tests de validation
+## 7. Tests de validation
 
-### Test de connectivité de base
+### 7.1. Test de connectivité de base
 
-| **Test** | **Source** | **Destination** | **Résultat attendu** |
+| Test | Source | Destination | Résultat attendu |
 |---|---|---|---|
-| Ping passerelle VLAN 10 | pc-win-1 | 10.10.10.1 | ✅ Succès |
-| Ping passerelle VLAN 20 | pc-win-2 | 10.10.20.1 | ✅ Succès |
-| Ping passerelle VLAN 30 | pc-win-3 | 10.10.30.1 | ✅ Succès |
-| Ping LAN pfSense | pc-win-2 | 10.0.0.1 | ✅ Succès |
-| Ping WAN pfSense | pc-win-2 | 192.168.122.55 | ✅ Succès |
-| Ping Internet | pc-win-2 | 8.8.8.8 | ✅ Succès |
-| Ping DNS | pc-win-2 | google.com | ✅ Succès |
-| Connexion WiFi | Client WiFi | Starlink-Education | ✅ Succès |
-| Obtention IP DHCP | Client WiFi | Serveur DHCP | ✅ Succès |
+| Ping passerelle VLAN 10 | pc-win-1 | 10.10.10.1 | Succès |
+| Ping passerelle VLAN 20 | pc-win-2 | 10.10.20.1 | Succès |
+| Ping passerelle VLAN 30 | pc-win-3 | 10.10.30.1 | Succès |
+| Ping LAN pfSense | pc-win-2 | 10.0.0.1 | Succès |
+| Ping WAN pfSense | pc-win-2 | 192.168.122.55 | Succès |
+| Ping Internet | pc-win-2 | 8.8.8.8 | Succès |
+| Ping DNS | pc-win-2 | google.com | Succès |
+| Connexion WiFi | Client WiFi | Starlink-Education | Succès |
+| Obtention IP DHCP | Client WiFi | Serveur DHCP | Succès |
 
-### Vérifications CLI
+### 7.2. Vérifications CLI
 
-**Switch S1 :**
+**Switch S1**
 
 ```cisco
 S1#show vlan brief
 S1#show interfaces trunk
 ```
 
-**Routeur R1 :**
+**Routeur R1**
 
 ```cisco
 R1#show ip interface brief
@@ -1408,12 +1085,12 @@ R1#show ip dhcp binding
 R1#show policy-map interface e0/0
 ```
 
-**pfSense :**
+**pfSense**
 
 - Diagnostics > Ping (8.8.8.8)
 - Status > Interfaces
 
-**vWLC :**
+**vWLC**
 
 ```cisco
 show interface summary
@@ -1423,38 +1100,38 @@ ping 10.10.20.1
 
 ---
 
-## 📊 Supervision
+## 8. Supervision
 
-### Activation SNMP
+### 8.1. Activation SNMP
 
-**Switch S1 :**
+**Switch S1**
 
 ```cisco
 S1(config)#snmp-server community public RO
 ```
 
-**Routeur R1 :**
+**Routeur R1**
 
 ```cisco
 R1(config)#snmp-server community public RO
 ```
 
-**pfSense :**
+**pfSense**
 
 - Services > SNMP
 - Enable SNMP daemon : ✅
-- Community : `public`
+- Community : public
 
-**vWLC :**
+**vWLC**
 
 - MANAGEMENT > SNMP > Communities
-- Community Name : `public`
-- IP Address : `10.10.50.100`
+- Community Name : public
+- IP Address : 10.10.50.100
 - Access Mode : Read Only
 
-### Ajout des hôtes dans Zabbix
+### 8.2. Ajout des hôtes dans Zabbix
 
-| **Hôte** | **Template** | **Interface** | **IP** | **Communauté** |
+| Hôte | Template | Interface | IP | Communauté |
 |---|---|---|---|---|
 | pfSense | Generic SNMP | SNMP | 10.0.0.1 | public |
 | Routeur_R1 | Generic SNMP | SNMP | 10.10.10.1 | public |
@@ -1463,14 +1140,14 @@ R1(config)#snmp-server community public RO
 
 ---
 
-## 📄 Licence
+## 9. Conclusion
 
-Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](../LICENSE) pour plus de détails.
+La maquette réseau réalisée constitue un pilote fonctionnel et reproductible, répondant aux spécifications du projet. Elle intègre :
 
----
+- Une architecture VLAN sécurisée avec 5 segments logiques
+- Un routage inter-VLAN robuste (Router-on-a-stick)
+- Un pare-feu pfSense avec NAT, filtrage et QoS
+- Une gestion WiFi professionnelle via vWLC (2 SSIDs)
+- Un système de supervision basé sur Zabbix et Grafana
 
-**⭐ N'oubliez pas de mettre une étoile à ce dépôt si vous le trouvez utile !**
-```
-
----
-
+L'ensemble a été validé par des tests de connectivité exhaustifs, démontrant la faisabilité technique du déploiement Starlink dans une école rurale sénégalaise.
