@@ -1089,6 +1089,18 @@ Le ping depuis le poste client du VLAN 20 (10.10.30.10) vers la passerelle (10.1
 ![Ping WAN pfSense](Images/ping_wan_pfsense.png)
 
 Le ping depuis le poste client du VLAN 30 (10.10.30.10) vers l'interface WAN de pfSense (192.168.117.164) est réussi avec 0% de perte.
+
+#### Test 6 : Ping Internet
+
+![Ping Internet](Images/ping_internet.png)
+
+Le ping depuis le poste client du VLAN 20 (`10.10.20.10`) vers Internet (`8.8.8.8`) est réussi avec **0% de perte**. Cela confirme que l'accès Internet fonctionne via Starlink.
+#### Test 7 : Ping DNS
+
+![Ping DNS](Images/ping_dns.png)
+
+Le ping depuis le poste client du VLAN 20 (`10.10.20.10`) vers `google.com` est réussi. Cela confirme que la résolution DNS fonctionne.
+
 ### 7.2. Vérifications CLI
 
 **Switch S1**
