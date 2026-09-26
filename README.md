@@ -1084,7 +1084,11 @@ Le ping depuis le poste client du VLAN 20 (10.10.20.10) vers la passerelle (10.1
 
 ![Ping passerelle VLAN 30](Images/ping_vlan30.png)
 Le ping depuis le poste client du VLAN 20 (10.10.30.10) vers la passerelle (10.10.30.1) est réussi avec 0% de perte.
+#### Test de connectivité - Ping WAN pfSense
 
+![Ping WAN pfSense](Images/ping_wan_pfsense.png)
+
+Le ping depuis le poste client du VLAN 30 (10.10.30.10) vers l'interface WAN de pfSense (192.168.117.164) est réussi avec 0% de perte.
 ### 7.2. Vérifications CLI
 
 **Switch S1**
