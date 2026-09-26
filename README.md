@@ -1100,6 +1100,10 @@ Le ping depuis le poste client du VLAN 20 (`10.10.20.10`) vers Internet (`8.8.8.
 ![Ping DNS](Images/ping_dns.png)
 
 Le ping depuis le poste client du VLAN 20 (`10.10.20.10`) vers `google.com` est réussi. Cela confirme que la résolution DNS fonctionne.
+#### Test 8 : Preuve
+
+![Ping DNS](Images/preuve.png)
+
 
 ### 7.2. Vérifications CLI
 
