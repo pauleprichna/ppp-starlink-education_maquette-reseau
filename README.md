@@ -1033,7 +1033,7 @@ R1#ping 10.10.20.10 source 10.10.20.1 tos 184 repeat 100
 ```
 
 **Capture Wireshark**
-
+![Test QoS VOICE](Images/test_qos_voice.png)
 ```
 Differentiated Services Field: 0xb8 (DSCP: EF, ECN: Not-ECT)
     1011 10.. = Differentiated Services Codepoint: Expedited Forwarding (46)
