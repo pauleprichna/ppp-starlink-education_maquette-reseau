@@ -1107,6 +1107,25 @@ Le ping depuis le poste client du VLAN 20 (`10.10.20.10`) vers `google.com` est 
 
 ![Ping DNS](Images/preuve.png)
 
+ #### Test de Connectivité des VLANs
+ ### Test 1 : VLAN 10 → VLAN 20
+ **Source :** pc-win-1 (10.10.10.10) — VLAN 10 (Management)
+**Destination :** pc-win-2 (10.10.20.10) — VLAN 20 (Éducation)
+![Ping VLAN 10 vers VLAN 20](Images/ping_vlan10_to_vlan20.png)
+Analyse : Le ping depuis le poste client du VLAN 10 vers le poste client du VLAN 20 est réussi avec 0% de perte. Cela confirme que le routage inter-VLAN fonctionne
+### Test 2: VLAN 20 → VLAN 10
+![Ping VLAN 10 vers VLAN 20](Images/ping_vlan20_to_vlan10.png)
+### Test 3: VLAN 30 → VLAN 10
+![Ping VLAN 10 vers VLAN 20](Images/ping_vlan30_to_vlan10.png)
+### Test 4: VLAN 20 → VLAN 30
+![Ping VLAN 20 vers VLAN 30](Images/ping_vlan20_to_vlan30.png)
+### Test 5: VLAN 30 → VLAN 20
+![Ping VLAN 30 vers VLAN é0](Images/ping_vlan30_to_vlan20.png)
+
+
+
+
+
 
 ### 7.2. Vérifications CLI
 
