@@ -1124,9 +1124,6 @@ Analyse : Le ping depuis le poste client du VLAN 10 vers le poste client du VLAN
 
 
 
-
-
-
 ### 7.2. Vérifications CLI
 
 **Switch S1**
@@ -1157,6 +1154,8 @@ show interface summary
 show wlan summary
 ping 10.10.20.1
 ```
+#### Étape 1 : Configuration des interfaces dynamiques
+![Interfaces du vWLC](Images/vwlc_interfaces.png)
 
 ---
 
