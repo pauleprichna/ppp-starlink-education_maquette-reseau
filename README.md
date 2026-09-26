@@ -37,6 +37,9 @@ Concevoir, dimensionner et documenter une maquette réseau fonctionnelle et repr
 ### 2.1. Schéma synoptique
 
 L'architecture globale de la maquette réseau déployée dans GNS3 est représentée par le schéma ci-dessous.
+Le schéma ci-dessous illustre l'architecture globale de la maquette réseau déployée dans GNS3 :
+
+![Architecture réseau](Images/architecture.png)
 
 **Légende du schéma :**
 
