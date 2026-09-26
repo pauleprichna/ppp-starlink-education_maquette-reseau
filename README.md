@@ -1067,6 +1067,15 @@ Differentiated Services Field: 0x88 (DSCP: AF41, ECN: Not-ECT)
 | Connexion WiFi | Client WiFi | Starlink-Education | Succès |
 | Obtention IP DHCP | Client WiFi | Serveur DHCP | Succès |
 
+
+### Test de connectivité - Ping passerelle VLAN 10
+
+### Test de connectivité - Ping passerelle VLAN 10
+
+![Ping passerelle VLAN 10](Images/ping_vlan10.png)
+
+Le ping depuis le poste client du VLAN 10 (10.10.10.10) vers la passerelle (10.10.10.1) est réussi avec 0% de perte.
+
 ### 7.2. Vérifications CLI
 
 **Switch S1**
