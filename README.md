@@ -1028,6 +1028,7 @@ Policy Map QOS_POLICY
 
 **Test VOICE (DSCP EF)**
 
+
 ```cisco
 R1#ping 10.10.20.10 source 10.10.20.1 tos 184 repeat 100
 ```
@@ -1046,6 +1047,7 @@ R1#ping 10.10.20.10 source 10.10.20.1 tos 136 repeat 100
 ```
 
 **Capture Wireshark**
+![Test QoS VOICE](Images/test_qos_video.png)
 
 ```
 Differentiated Services Field: 0x88 (DSCP: AF41, ECN: Not-ECT)
