@@ -1034,7 +1034,7 @@ R1#ping 10.10.20.10 source 10.10.20.1 tos 184 repeat 100
 ```
 
 **Capture Wireshark**
-![Test QoS VOICE](Images/test_qos_voice.png)
+
 ```
 Differentiated Services Field: 0xb8 (DSCP: EF, ECN: Not-ECT)
     1011 10.. = Differentiated Services Codepoint: Expedited Forwarding (46)
@@ -1047,7 +1047,6 @@ R1#ping 10.10.20.10 source 10.10.20.1 tos 136 repeat 100
 ```
 
 **Capture Wireshark**
-![Test QoS VOICE](Images/test_qos_video.png)
 
 ```
 Differentiated Services Field: 0x88 (DSCP: AF41, ECN: Not-ECT)
@@ -1071,59 +1070,6 @@ Differentiated Services Field: 0x88 (DSCP: AF41, ECN: Not-ECT)
 | Ping DNS | pc-win-2 | google.com | Succès |
 | Connexion WiFi | Client WiFi | Starlink-Education | Succès |
 | Obtention IP DHCP | Client WiFi | Serveur DHCP | Succès |
-
-
-### Test de connectivité - Ping passerelle VLAN 10
-
-### Test de connectivité - Ping passerelle VLAN 10
-
-![Ping passerelle VLAN 10](Images/ping_vlan10.png)
-
-Le ping depuis le poste client du VLAN 10 (10.10.10.10) vers la passerelle (10.10.10.1) est réussi avec 0% de perte.
-### Test de connectivité - Ping passerelle VLAN 20
-
-![Ping passerelle VLAN 20](Images/ping_vlan20.png)
-
-Le ping depuis le poste client du VLAN 20 (10.10.20.10) vers la passerelle (10.10.20.1) est réussi avec 0% de perte.
-### Test de connectivité - Ping passerelle VLAN 20
-
-![Ping passerelle VLAN 30](Images/ping_vlan30.png)
-Le ping depuis le poste client du VLAN 20 (10.10.30.10) vers la passerelle (10.10.30.1) est réussi avec 0% de perte.
-#### Test de connectivité - Ping WAN pfSense
-
-![Ping WAN pfSense](Images/ping_wan_pfsense.png)
-
-Le ping depuis le poste client du VLAN 30 (10.10.30.10) vers l'interface WAN de pfSense (192.168.117.164) est réussi avec 0% de perte.
-
-#### Test 6 : Ping Internet
-
-![Ping Internet](Images/ping_internet.png)
-
-Le ping depuis le poste client du VLAN 20 (`10.10.20.10`) vers Internet (`8.8.8.8`) est réussi avec **0% de perte**. Cela confirme que l'accès Internet fonctionne via Starlink.
-#### Test 7 : Ping DNS
-
-![Ping DNS](Images/ping_dns.png)
-
-Le ping depuis le poste client du VLAN 20 (`10.10.20.10`) vers `google.com` est réussi. Cela confirme que la résolution DNS fonctionne.
-#### Test 8 : Preuve
-
-![Ping DNS](Images/preuve.png)
-
- #### Test de Connectivité des VLANs
- ### Test 1 : VLAN 10 → VLAN 20
- **Source :** pc-win-1 (10.10.10.10) — VLAN 10 (Management)
-**Destination :** pc-win-2 (10.10.20.10) — VLAN 20 (Éducation)
-![Ping VLAN 10 vers VLAN 20](Images/ping_vlan10_to_vlan20.png)
-Analyse : Le ping depuis le poste client du VLAN 10 vers le poste client du VLAN 20 est réussi avec 0% de perte. Cela confirme que le routage inter-VLAN fonctionne
-### Test 2: VLAN 20 → VLAN 10
-![Ping VLAN 10 vers VLAN 20](Images/ping_vlan20_to_vlan10.png)
-### Test 3: VLAN 30 → VLAN 10
-![Ping VLAN 10 vers VLAN 20](Images/ping_vlan30_to_vlan10.png)
-### Test 4: VLAN 20 → VLAN 30
-![Ping VLAN 20 vers VLAN 30](Images/ping_vlan20_to_vlan30.png)
-### Test 5: VLAN 30 → VLAN 20
-![Ping VLAN 30 vers VLAN é0](Images/ping_vlan30_to_vlan20.png)
-
 
 
 ### 7.2. Vérifications CLI
@@ -1157,7 +1103,6 @@ show wlan summary
 ping 10.10.20.1
 ```
 #### Étape 1 : Configuration des interfaces dynamiques
-![Interfaces du vWLC](Images/vwlc_interfaces.png)
 
 ---
 
