@@ -1212,3 +1212,135 @@ La maquette réseau réalisée constitue un pilote fonctionnel et reproductible,
 - Un système de supervision basé sur Zabbix et Grafana
 
 L'ensemble a été validé par des tests de connectivité exhaustifs, démontrant la faisabilité technique du déploiement Starlink dans une école rurale sénégalaise.
+
+---
+
+## 5. Alimentation Solaire
+
+### 5.1. Pourquoi une alimentation solaire ?
+
+Le kit Starlink permet d'apporter Internet à une école rurale, même très isolée. Mais il a besoin d'électricité pour fonctionner en continu. Or, dans beaucoup de zones rurales au Sénégal, le réseau électrique national est absent, instable, ou trop coûteux à raccorder.
+
+La solution retenue est de produire l'électricité sur place avec des panneaux solaires, et de la stocker dans des batteries pour que le kit continue de fonctionner la nuit ou par temps nuageux.
+
+Le Sénégal bénéficie d'un excellent ensoleillement, ce qui rend cette solution particulièrement efficace.
+
+| **Élément** | **Rôle** |
+|---|---|
+| Panneau solaire | Source d'énergie — produit l'électricité quand il y a du soleil |
+| Batterie | Réserve — stocke l'électricité pour la nuit ou les jours sans soleil |
+
+---
+
+### 5.2. Calcul de consommation
+
+Le kit Starlink Standard consomme entre **75 et 100 watts** pendant son fonctionnement. Pour connaître son besoin énergétique sur une journée, on multiplie sa puissance par ses heures d'utilisation.
+
+**Énergie consommée par jour (Wh) = Puissance du kit (W) × Heures d'utilisation par jour**
+
+Deux hypothèses d'usage ont été comparées.
+
+| **Scénario** | **Calcul** | **Énergie journalière** |
+|---|---|---|
+| Usage continu 24h/24 | 75 W × 24 h | **1 800 Wh/jour** |
+| Usage limité 14h/jour | 75 W × 14 h | **1 050 Wh/jour** |
+
+---
+
+### 5.3. Dimensionnement du panneau solaire et des batteries
+
+#### 5.3.1. Le panneau solaire
+
+Un panneau solaire ne produit sa pleine puissance que pendant les heures de fort soleil. Au Sénégal, cette durée est d'environ **5,2 heures par jour**.
+
+**Taille du panneau (Wc) = Énergie consommée par jour ÷ (Heures de soleil × rendement du système)**
+
+| **Scénario** | **Calcul** | **Puissance crête** |
+|---|---|---|
+| 24h/24 (1 800 Wh/j) | 1 800 ÷ (5,2 × 0,75) | ≈ **460 Wc** → arrondi à **500 Wc** |
+| 14h/jour (1 050 Wh/j) | 1 050 ÷ (5,2 × 0,75) | ≈ **270 Wc** → arrondi à **300 Wc** |
+
+#### 5.3.2. La batterie
+
+La batterie doit stocker assez d'énergie pour couvrir la nuit, plus une marge de sécurité pour les jours nuageux.
+
+**Capacité batterie (Wh) = (Énergie consommée par jour × jours d'autonomie) ÷ profondeur de décharge (DoD)**
+
+| **Scénario** | **Calcul** | **Capacité batterie** |
+|---|---|---|
+| 24h/24 (1 800 Wh/j) | (1 800 × 1,3) ÷ 0,8 | ≈ **2 900 Wh** → batterie 24V/125Ah |
+| 14h/jour (1 050 Wh/j) | (1 050 × 1,3) ÷ 0,8 | ≈ **1 700 Wh** → batterie 12V/150Ah |
+
+---
+
+### 5.4. Prix du kit solaire (données réelles du marché sénégalais)
+
+#### 5.4.1. Prix des panneaux solaires
+
+| **Modèle** | **Puissance** | **Prix (FCFA)** | **Prix au Wc (FCFA)** |
+|---|---|---|---|
+| Panneau 300W | 300 Wc | 120 000 | 400 FCFA/Wc |
+| Panneau 350W | 350 Wc | 60 000 - 65 000 | 171 - 185 FCFA/Wc |
+| Panneau 400W | 400 Wc | 65 000 - 70 000 | 162 - 175 FCFA/Wc |
+
+**Prix moyen retenu : environ 180 FCFA/Wc**
+
+#### 5.4.2. Prix des batteries lithium
+
+| **Modèle** | **Capacité** | **Prix (FCFA)** | **Prix au Wh (FCFA)** |
+|---|---|---|---|
+| Batterie lithium 5 kWh | 5 000 Wh | 2 800 000 - 4 500 000 | 560 - 900 FCFA/Wh |
+
+**Prix moyen retenu : environ 700 FCFA/Wh**
+
+#### 5.4.3. Récapitulatif chiffré des deux scénarios
+
+| **Scénario** | **Panneau** | **Batterie** | **Coût total estimé** |
+|---|---|---|---|
+| A — 24h/24 | ~500 Wc (90 000 FCFA) | ~2 900 Wh (2 030 000 FCFA) | **2 515 000 FCFA** |
+| B — 14h/jour | ~300 Wc (54 000 FCFA) | ~1 700 Wh (1 190 000 FCFA) | **1 639 000 FCFA** |
+
+**Recommandation :** Le scénario **14h/jour** est recommandé comme hypothèse de référence pour le calcul du TCO.
+
+---
+
+### 5.5. Plan d'installation
+
+#### 5.5.1. Emplacement et orientation
+
+- Installer les panneaux sur une surface dégagée, sans ombre portée.
+- Orienter les panneaux **plein sud**, avec une inclinaison proche de la latitude locale (**~14-15° à Dakar**).
+- Privilégier une pose sur le toit de l'école ou une structure au sol surélevée.
+
+#### 5.5.2. Câblage et protections
+
+- Utiliser des câbles de section adaptée avec connecteurs étanches (type MC4).
+- Installer un **régulateur de charge MPPT** entre panneaux et batterie.
+- Prévoir des **fusibles/disjoncteurs DC** entre chaque élément.
+- Placer la batterie et le régulateur dans un **coffret ventilé**.
+
+#### 5.5.3. Sécurité et entretien
+
+- Prévoir une **protection anti-vol** (fixation solide, clôture).
+- **Nettoyer régulièrement** les panneaux (poussière, sable).
+- **Inspecter périodiquement** les connexions et l'état de la batterie.
+
+---
+
+### 5.6. Script de génération des graphiques
+
+Le script `graphiques_solaire.py` génère automatiquement 5 graphiques :
+
+| **Graphique** | **Fichier PNG** |
+|---|---|
+| Comparaison des coûts | `graphique_comparaison_couts.png` |
+| Répartition des coûts | `graphique_repartition_couts.png` |
+| Évolution de la consommation | `graphique_evolution_consommation.png` |
+| Dimensionnement des panneaux | `graphique_dimensionnement_panneaux.png` |
+| Dimensionnement des batteries | `graphique_dimensionnement_batteries.png` |
+
+**Exécution :**
+
+```bash
+py panneau_solaire\modules\graphiques_solaire.py
+```
