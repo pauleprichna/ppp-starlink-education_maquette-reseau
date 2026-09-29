@@ -1289,3 +1289,8 @@ Le script `graphiques_solaire.py` génère automatiquement 5 graphiques :
 ```bash
 py panneau_solaire\modules\graphiques_solaire.py
 ```
+### 📄 Documentation complète du projet
+
+Le rapport complet du projet est disponible en ligne :
+
+👉 **[Consulter le document PPP Starlink Éducation](https://docs.google.com/document/d/1PnZ2refYE0IyLc6piM9PYiNfWLfK0pSlPYtS9K4sIws/edit?tab=t.0)**
