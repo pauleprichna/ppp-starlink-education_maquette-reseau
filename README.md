@@ -1,4 +1,4 @@
-# Document de la Maquette Réseau – PPP Starlink Éducation
+# Document de la Maquette Réseau – PPP Starlink Éducation et ALIMENTATION SOLAIRE DU KIT STARLINK
 
 ## 1. Objectifs de la maquette
 
