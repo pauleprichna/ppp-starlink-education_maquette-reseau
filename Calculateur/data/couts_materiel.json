@@ -1,0 +1,11 @@
+{
+  "prix_routeur_fcfa": 80000,
+  "prix_switch_fcfa": 160000,
+  "puissance_panneau_w": 300,
+  "prix_panneau_fcfa": 45000,
+  "tension_batterie_v": 12,
+  "capacite_batterie_ah": 100,
+  "prix_batterie_fcfa": 185000,
+  "cout_installation_fcfa": 100000,
+  "cout_formation_fcfa": 150000
+}

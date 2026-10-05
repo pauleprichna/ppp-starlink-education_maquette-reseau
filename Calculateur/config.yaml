@@ -1,0 +1,13 @@
+app:
+  titre: "Calculateur Starlink Education"
+  langue: "fr"
+
+projet:
+  nom: "PPP Starlink 3 Education"
+  groupe: 3
+  ecole: "EC2LT"
+
+parametres_defaut:
+  nb_eleves: 500
+  taux_contention_pct: 20
+  offre_starlink: "Lite"

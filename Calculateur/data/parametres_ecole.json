@@ -1,0 +1,11 @@
+{
+  "nb_eleves_defaut": 500,
+  "taux_contention_defaut_pct": 20,
+  "heures_utilisation_par_jour": 10,
+  "heures_ensoleillement_moyen": 5.7,
+  "jours_autonomie": 1.3,
+  "profondeur_decharge_batterie": 0.8,
+  "coefficient_debit_reel_pct": 70,
+  "jours_ecole_par_mois": 22,
+  "facteur_activite_moyen": 0.5
+}
